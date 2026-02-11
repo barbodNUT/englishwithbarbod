@@ -6,18 +6,44 @@
     <title>English with Barbod | IELTS & General English Tutor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Apply dark mode logic before page renders to prevent flickering
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        darkCard: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .glass-effect {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .glass-effect {
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .page-section {
@@ -69,7 +95,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100">
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 glass-effect">
@@ -80,31 +106,39 @@
             </div>
             
             <!-- Desktop Nav -->
-            <div class="hidden md:flex space-x-8 font-medium">
+            <div class="hidden md:flex items-center space-x-8 font-medium">
                 <button onclick="showPage('home')" class="hover:text-blue-600 transition nav-link text-blue-600" data-page="home">Home</button>
                 <button onclick="showPage('about')" class="hover:text-blue-600 transition nav-link" data-page="about">About Me</button>
                 <button onclick="showPage('courses')" class="hover:text-blue-600 transition nav-link" data-page="courses">Courses</button>
                 <button onclick="showPage('testimonials')" class="hover:text-blue-600 transition nav-link" data-page="testimonials">Feedback</button>
                 <button onclick="showPage('portal')" class="hover:text-blue-600 transition nav-link" data-page="portal">Student Portal</button>
                 <button onclick="showPage('contact')" class="hover:text-blue-600 transition nav-link" data-page="contact">Contact</button>
+                
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition" title="Toggle Theme">
+                    <i id="theme-icon" class="fas fa-moon dark:text-yellow-400"></i>
+                </button>
             </div>
 
-            <!-- Mobile Menu Icon -->
-            <div class="md:hidden">
+            <!-- Mobile Actions -->
+            <div class="md:hidden flex items-center space-x-4">
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                    <i id="theme-icon-mobile" class="fas fa-moon dark:text-yellow-400"></i>
+                </button>
                 <button id="mobile-menu-btn" class="text-2xl p-2"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white z-[60] hidden flex-col items-center justify-center space-y-8 text-2xl font-bold">
+    <div id="mobile-menu" class="fixed inset-0 bg-white dark:bg-darkBg z-[60] hidden flex-col items-center justify-center space-y-8 text-2xl font-bold">
         <button onclick="showPage('home')" class="mobile-link">Home</button>
         <button onclick="showPage('about')" class="mobile-link">About Me</button>
         <button onclick="showPage('courses')" class="mobile-link">Courses</button>
         <button onclick="showPage('testimonials')" class="mobile-link">Feedback</button>
         <button onclick="showPage('portal')" class="mobile-link">Student Portal</button>
         <button onclick="showPage('contact')" class="mobile-link">Contact</button>
-        <button id="close-menu" class="mt-8 text-red-500 text-lg border border-red-200 px-6 py-2 rounded-full">Close</button>
+        <button id="close-menu" class="mt-8 text-red-500 text-lg border border-red-200 dark:border-red-900 px-6 py-2 rounded-full">Close</button>
     </div>
 
     <main class="pt-24 pb-12 max-w-6xl mx-auto px-4">
@@ -113,21 +147,20 @@
         <section id="home" class="page-section active">
             <div class="flex flex-col md:flex-row items-center justify-between py-12 gap-12">
                 <div class="md:w-1/2 space-y-6 order-2 md:order-1 text-center md:text-left">
-                    <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+                    <h1 class="text-5xl md:text-6xl font-extrabold leading-tight dark:text-white">
                         Unlock Your <span class="gradient-text">IELTS Potential</span> with Expert Guidance.
                     </h1>
-                    <p class="text-xl text-gray-600 leading-relaxed">
-                        I hold a <span class="font-semibold text-blue-700">Band 8.0 IELTS Score</span>. I don't just teach English; I teach you how to master it through real-world analysis and proven techniques.
+                    <p class="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                        I hold a <span class="font-semibold text-blue-700 dark:text-blue-400">Band 8.0 IELTS Score</span>. I don't just teach English; I teach you how to master it through real-world analysis and proven techniques.
                     </p>
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-                        <button onclick="showPage('courses')" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-200">View Courses</button>
-                        <button onclick="showPage('about')" class="border border-blue-600 text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition">My Credentials</button>
+                        <button onclick="showPage('courses')" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-200 dark:shadow-none">View Courses</button>
+                        <button onclick="showPage('about')" class="border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20 transition">My Credentials</button>
                     </div>
                 </div>
                 <div class="md:w-1/2 flex justify-center order-1 md:order-2">
                     <div class="profile-img-container w-64 h-64 md:w-80 md:h-80">
-                        <div class="w-full h-full bg-blue-100 rounded-3xl flex items-center justify-center overflow-hidden border-4 border-white shadow-2xl">
-                           <!-- Image with fallback to icon if it fails to load -->
+                        <div class="w-full h-full bg-blue-100 dark:bg-blue-900 rounded-3xl flex items-center justify-center overflow-hidden border-4 border-white dark:border-gray-800 shadow-2xl">
                            <img src="barbod.jpg" alt="Barbod Alhouei" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                            <i class="fas fa-user-tie text-8xl text-blue-300 hidden"></i>
                         </div>
@@ -136,20 +169,20 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-video"></i></div>
+                <div class="bg-white dark:bg-darkCard p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center">
+                    <div class="text-blue-600 dark:text-blue-400 text-3xl mb-4"><i class="fas fa-video"></i></div>
                     <h3 class="font-bold text-xl mb-2">Google Meet</h3>
-                    <p class="text-gray-500">All classes are held virtually for your convenience.</p>
+                    <p class="text-gray-500 dark:text-gray-400">All classes are held virtually for your convenience.</p>
                 </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-users"></i></div>
+                <div class="bg-white dark:bg-darkCard p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center">
+                    <div class="text-blue-600 dark:text-blue-400 text-3xl mb-4"><i class="fas fa-users"></i></div>
                     <h3 class="font-bold text-xl mb-2">Private & Semi-Private</h3>
-                    <p class="text-gray-500">1-on-1 preferred, or small groups up to 3 students.</p>
+                    <p class="text-gray-500 dark:text-gray-400">1-on-1 preferred, or small groups up to 3 students.</p>
                 </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-certificate"></i></div>
+                <div class="bg-white dark:bg-darkCard p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center">
+                    <div class="text-blue-600 dark:text-blue-400 text-3xl mb-4"><i class="fas fa-certificate"></i></div>
                     <h3 class="font-bold text-xl mb-2">TTC Certified</h3>
-                    <p class="text-gray-500">Professional methodology and proven results.</p>
+                    <p class="text-gray-500 dark:text-gray-400">Professional methodology and proven results.</p>
                 </div>
             </div>
         </section>
@@ -158,24 +191,24 @@
         <section id="about" class="page-section">
             <div class="max-w-4xl mx-auto py-12">
                 <div class="flex flex-col md:flex-row gap-10 items-center mb-12">
-                    <div class="w-32 h-32 md:w-48 md:h-48 rounded-full bg-blue-50 flex items-center justify-center border-4 border-blue-600 shadow-lg flex-shrink-0 overflow-hidden">
+                    <div class="w-32 h-32 md:w-48 md:h-48 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center border-4 border-blue-600 shadow-lg flex-shrink-0 overflow-hidden">
                         <img src="barbod.jpg" alt="Barbod Alhouei" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                         <i class="fas fa-user text-5xl text-blue-600 hidden"></i>
                     </div>
                     <div>
-                        <h2 class="text-4xl font-bold mb-2">Barbod Alhouei</h2>
-                        <p class="text-blue-600 font-semibold italic uppercase tracking-wider text-sm">Product Developer, Nutritionist & English Expert</p>
+                        <h2 class="text-4xl font-bold mb-2 dark:text-white">Barbod Alhouei</h2>
+                        <p class="text-blue-600 dark:text-blue-400 font-semibold italic uppercase tracking-wider text-sm">Product Developer, Nutritionist & English Expert</p>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
                     <div class="space-y-6">
-                        <p class="text-lg leading-relaxed text-gray-700">
+                        <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                             I am a multi-disciplinary professional blending the precision of science with the art of language communication. My approach to teaching English is analytical, structured, and highly effective.
                         </p>
                         
                         <div class="space-y-4">
-                            <h3 class="text-xl font-bold text-blue-800">Professional Qualifications</h3>
+                            <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300">Professional Qualifications</h3>
                             <ul class="space-y-3">
                                 <li class="flex items-start">
                                     <i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i>
@@ -201,9 +234,9 @@
                         </div>
                     </div>
 
-                    <div class="bg-blue-600 text-white p-8 rounded-3xl shadow-xl">
+                    <div class="bg-blue-600 dark:bg-blue-700 text-white p-8 rounded-3xl shadow-xl">
                         <h3 class="text-2xl font-bold mb-4 italic">"My Philosophy"</h3>
-                        <p class="text-blue-50 leading-loose">
+                        <p class="text-blue-50 dark:text-blue-100 leading-loose">
                             "I believe language acquisition shouldn't be a chore of memorizing isolated rules. By analyzing real-world texts and applying grammar in context, my students develop an intuitive feel for the language that prepares them for both high-stakes exams and real-life professional environments."
                         </p>
                     </div>
@@ -214,45 +247,45 @@
         <!-- STUDENT FEEDBACK -->
         <section id="testimonials" class="page-section">
             <div class="py-12">
-                <h2 class="text-4xl font-bold mb-4 text-center">What My Students Say</h2>
-                <p class="text-gray-500 text-center mb-12 max-w-2xl mx-auto italic">Real feedback from students pursuing their goals.</p>
+                <h2 class="text-4xl font-bold mb-4 text-center dark:text-white">What My Students Say</h2>
+                <p class="text-gray-500 dark:text-gray-400 text-center mb-12 max-w-2xl mx-auto italic">Real feedback from students pursuing their goals.</p>
 
                 <div class="space-y-12">
                     <!-- Testimonial 1: Narges -->
-                    <div class="bg-white p-8 md:p-12 rounded-3xl shadow-md border border-gray-100 flex flex-col lg:flex-row gap-8">
+                    <div class="bg-white dark:bg-darkCard p-8 md:p-12 rounded-3xl shadow-md border border-gray-100 dark:border-gray-800 flex flex-col lg:flex-row gap-8">
                         <div class="lg:w-1/2">
                             <div class="flex items-center space-x-4 mb-4">
-                                <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center font-bold">N</div>
-                                <h3 class="text-xl font-bold">Narges</h3>
+                                <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center font-bold">N</div>
+                                <h3 class="text-xl font-bold dark:text-white">Narges</h3>
                             </div>
-                            <div class="text-blue-600 mb-4 italic font-medium">English Translation</div>
-                            <p class="text-gray-700 leading-relaxed italic">
+                            <div class="text-blue-600 dark:text-blue-400 mb-4 italic font-medium">English Translation</div>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed italic">
                                 "I started Barbod's classes for the IELTS exam. After the placement test, we decided to work on my General English first before starting IELTS. We've had two terms together now, and in all my years of taking language classes, I've never seen a teacher as cool and professional as him..."
                             </p>
                         </div>
-                        <div class="lg:w-1/2 bg-gray-50 p-6 rounded-2xl border-l-4 border-blue-500">
-                            <div class="text-gray-400 mb-4 italic font-medium">Original Persian</div>
-                            <p class="persian-text text-gray-800">
+                        <div class="lg:w-1/2 bg-gray-50 dark:bg-darkBg p-6 rounded-2xl border-l-4 border-blue-500">
+                            <div class="text-gray-400 dark:text-gray-500 mb-4 italic font-medium">Original Persian</div>
+                            <p class="persian-text text-gray-800 dark:text-gray-200">
                                 من برای آزمون آیلتس شروع به شرکت تو کلاسای باربد جان کردم که که بعد تعیین سطح تصمیم گرفتیم یکم رو زبان جنرالم کار کنیم و بعدش برای آیلتس استارت بزنیم ، الان دو دوره‌ هستش که باهم کلاس داریم و واقعا من تو این همه سال‌هایی که کلاس زبان می رفتم ، استادی به خفن بودن و حرفه ای بودن ایشون ندیدم 😍🥲 مدیریت تایم کلاسشون عالیه طوری که همه اسکیل هارو کاور می کنه...
                             </p>
                         </div>
                     </div>
 
                     <!-- Testimonial 2: Mostafa -->
-                    <div class="bg-white p-8 md:p-12 rounded-3xl shadow-md border border-gray-100 flex flex-col lg:flex-row gap-8">
+                    <div class="bg-white dark:bg-darkCard p-8 md:p-12 rounded-3xl shadow-md border border-gray-100 dark:border-gray-800 flex flex-col lg:flex-row gap-8">
                         <div class="lg:w-1/2">
                             <div class="flex items-center space-x-4 mb-4">
-                                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">M</div>
-                                <h3 class="text-xl font-bold">Mostafa</h3>
+                                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-bold">M</div>
+                                <h3 class="text-xl font-bold dark:text-white">Mostafa</h3>
                             </div>
-                            <div class="text-blue-600 mb-4 italic font-medium">English Translation</div>
-                            <p class="text-gray-700 leading-relaxed italic">
+                            <div class="text-blue-600 dark:text-blue-400 mb-4 italic font-medium">English Translation</div>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed italic">
                                 "I had taken language classes before, but what was different for me in Mr. Alhouei's class was that the material wasn't just taught theoretically; we actually used them in conversation and questions..."
                             </p>
                         </div>
-                        <div class="lg:w-1/2 bg-gray-50 p-6 rounded-2xl border-l-4 border-blue-500">
-                            <div class="text-gray-400 mb-4 italic font-medium">Original Persian</div>
-                            <p class="persian-text text-gray-800">
+                        <div class="lg:w-1/2 bg-gray-50 dark:bg-darkBg p-6 rounded-2xl border-l-4 border-blue-500">
+                            <div class="text-gray-400 dark:text-gray-500 mb-4 italic font-medium">Original Persian</div>
+                            <p class="persian-text text-gray-800 dark:text-gray-200">
                                 من قبلاً کلاس زبان رفته بودم، ولی چیزی که توی کلاس استاد الهویی برام فرق داشت این بود که مطالب فقط تئوری گفته نمی‌شد و واقعاً توی مکالمه و سؤال‌ها ازشون استفاده می‌کردیم. همین باعث می‌شد مطالب بهتر توی ذهنم بمونه.
                                 برای خود من گرامر همیشه یه بخش سخت و خشک بود، ولی اینجا چون با مثال و استفاده‌ی واقعی جلو می‌رفتیم، فهمیدنش خیلی راحت‌تر شد.
                             </p>
@@ -265,14 +298,14 @@
         <!-- STUDENT PORTAL -->
         <section id="portal" class="page-section">
             <div class="max-w-3xl mx-auto py-12">
-                <div id="portal-lock" class="bg-white p-10 rounded-3xl shadow-xl border border-gray-100 text-center">
-                    <div class="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                <div id="portal-lock" class="bg-white dark:bg-darkCard p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 text-center">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-darkBg text-gray-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
                         <i class="fas fa-lock"></i>
                     </div>
-                    <h2 class="text-3xl font-bold mb-4">Student Portal</h2>
-                    <p class="text-gray-500 mb-6">Please enter your access code to view practice materials.</p>
+                    <h2 class="text-3xl font-bold mb-4 dark:text-white">Student Portal</h2>
+                    <p class="text-gray-500 dark:text-gray-400 mb-6">Please enter your access code to view practice materials.</p>
                     <div class="max-w-xs mx-auto space-y-4">
-                        <input type="password" id="student-code" placeholder="Enter code" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none text-center">
+                        <input type="password" id="student-code" placeholder="Enter code" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-darkBg focus:ring-2 focus:ring-blue-500 outline-none text-center dark:text-white">
                         <button onclick="verifyCode()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">Access Practices</button>
                         <p id="lock-error" class="text-red-500 text-sm hidden">Incorrect code. Please try again.</p>
                     </div>
@@ -280,8 +313,8 @@
 
                 <div id="portal-content" class="hidden space-y-8">
                     <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-3xl font-bold">Practice Materials</h2>
-                        <button onclick="logoutPortal()" class="text-gray-400 hover:text-red-500 text-sm flex items-center">
+                        <h2 class="text-3xl font-bold dark:text-white">Practice Materials</h2>
+                        <button onclick="logoutPortal()" class="text-gray-400 hover:text-red-500 text-sm flex items-center transition">
                             <i class="fas fa-sign-out-alt mr-2"></i> Lock Portal
                         </button>
                     </div>
@@ -295,59 +328,59 @@
         <!-- COURSES PAGE -->
         <section id="courses" class="page-section">
             <div class="py-12">
-                <h2 class="text-4xl font-bold mb-4 text-center">My Specialized Courses</h2>
+                <h2 class="text-4xl font-bold mb-4 text-center dark:text-white">My Specialized Courses</h2>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
                     
                     <!-- General English -->
-                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 course-card">
-                        <div class="inline-block px-4 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold mb-4">Fluency & Usage</div>
-                        <h3 class="text-2xl font-bold mb-4">General English</h3>
-                        <p class="text-gray-600 mb-6">Learn while using real English. My methodology moves away from abstract rules to practical application.</p>
+                    <div class="bg-white dark:bg-darkCard p-8 rounded-3xl shadow-md border border-gray-100 dark:border-gray-800 course-card">
+                        <div class="inline-block px-4 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-sm font-bold mb-4">Fluency & Usage</div>
+                        <h3 class="text-2xl font-bold mb-4 dark:text-white">General English</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">Learn while using real English. My methodology moves away from abstract rules to practical application.</p>
                         
                         <div class="space-y-4 mb-8">
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex-shrink-0 flex items-center justify-center text-blue-600 dark:text-blue-400 mt-1">
                                     <i class="fas fa-search text-xs"></i>
                                 </div>
-                                <p class="text-gray-700"><span class="font-bold">Text Analysis:</span> We analyze real-world texts, walking through every sentence to understand structure and nuance.</p>
+                                <p class="text-gray-700 dark:text-gray-300"><span class="font-bold">Text Analysis:</span> We analyze real-world texts, walking through every sentence to understand structure and nuance.</p>
                             </div>
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex-shrink-0 flex items-center justify-center text-blue-600 dark:text-blue-400 mt-1">
                                     <i class="fas fa-comments text-xs"></i>
                                 </div>
-                                <p class="text-gray-700"><span class="font-bold">IELTS Speaking:</span> We practice communication using real IELTS exam questions immediately.</p>
+                                <p class="text-gray-700 dark:text-gray-300"><span class="font-bold">IELTS Speaking:</span> We practice communication using real IELTS exam questions immediately.</p>
                             </div>
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex-shrink-0 flex items-center justify-center text-blue-600 dark:text-blue-400 mt-1">
                                     <i class="fas fa-book text-xs"></i>
                                 </div>
-                                <p class="text-gray-700"><span class="font-bold">Grammar Review:</span> Rules are reviewed based on the context of what we've just analyzed and spoken.</p>
+                                <p class="text-gray-700 dark:text-gray-300"><span class="font-bold">Grammar Review:</span> Rules are reviewed based on the context of what we've just analyzed and spoken.</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- IELTS Courses -->
-                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 course-card">
-                        <div class="inline-block px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-bold mb-4">Tactical Preparation</div>
-                        <h3 class="text-2xl font-bold mb-4">IELTS Strategy</h3>
-                        <p class="text-gray-600 mb-6">Master the specific techniques behind every question type across all four skills.</p>
+                    <div class="bg-white dark:bg-darkCard p-8 rounded-3xl shadow-md border border-gray-100 dark:border-gray-800 course-card">
+                        <div class="inline-block px-4 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm font-bold mb-4">Tactical Preparation</div>
+                        <h3 class="text-2xl font-bold mb-4 dark:text-white">IELTS Strategy</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">Master the specific techniques behind every question type across all four skills.</p>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                <p class="text-blue-600 font-bold text-lg">12 Sessions</p>
-                                <p class="text-sm text-gray-600 font-semibold uppercase tracking-tight">Writing Task 2</p>
+                            <div class="p-4 bg-gray-50 dark:bg-darkBg rounded-2xl border border-gray-100 dark:border-gray-800 text-center">
+                                <p class="text-blue-600 dark:text-blue-400 font-bold text-lg">12 Sessions</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-500 font-semibold uppercase tracking-tight">Writing Task 2</p>
                             </div>
-                            <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                <p class="text-blue-600 font-bold text-lg">10 Sessions</p>
-                                <p class="text-sm text-gray-600 font-semibold uppercase tracking-tight">Writing Task 1</p>
+                            <div class="p-4 bg-gray-50 dark:bg-darkBg rounded-2xl border border-gray-100 dark:border-gray-800 text-center">
+                                <p class="text-blue-600 dark:text-blue-400 font-bold text-lg">10 Sessions</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-500 font-semibold uppercase tracking-tight">Writing Task 1</p>
                             </div>
-                            <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                <p class="text-blue-600 font-bold text-lg">10 Sessions</p>
-                                <p class="text-sm text-gray-600 font-semibold uppercase tracking-tight">Listening</p>
+                            <div class="p-4 bg-gray-50 dark:bg-darkBg rounded-2xl border border-gray-100 dark:border-gray-800 text-center">
+                                <p class="text-blue-600 dark:text-blue-400 font-bold text-lg">10 Sessions</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-500 font-semibold uppercase tracking-tight">Listening</p>
                             </div>
-                            <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                <p class="text-blue-600 font-bold text-lg">10 Sessions</p>
-                                <p class="text-sm text-gray-600 font-semibold uppercase tracking-tight">Reading</p>
+                            <div class="p-4 bg-gray-50 dark:bg-darkBg rounded-2xl border border-gray-100 dark:border-gray-800 text-center">
+                                <p class="text-blue-600 dark:text-blue-400 font-bold text-lg">10 Sessions</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-500 font-semibold uppercase tracking-tight">Reading</p>
                             </div>
                         </div>
                     </div>
@@ -359,20 +392,20 @@
         <!-- CONTACT PAGE -->
         <section id="contact" class="page-section">
             <div class="py-12 max-w-2xl mx-auto text-center">
-                <h2 class="text-4xl font-bold mb-4">Start Your Journey</h2>
-                <p class="text-gray-600 mb-8 px-4 leading-relaxed">
+                <h2 class="text-4xl font-bold mb-4 dark:text-white">Start Your Journey</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-8 px-4 leading-relaxed">
                     Ready to take your English to the next level? reach out today to schedule a placement test or a consultation.
                 </p>
-                <div class="bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
-                    <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
+                <div class="bg-white dark:bg-darkCard p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800">
+                    <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
                         <i class="fab fa-telegram-plane"></i>
                     </div>
-                    <a href="https://t.me/DtBarbod" target="_blank" class="inline-flex items-center space-x-3 bg-blue-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-blue-600 transition shadow-lg shadow-blue-200">
+                    <a href="https://t.me/DtBarbod" target="_blank" class="inline-flex items-center space-x-3 bg-blue-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-blue-600 transition shadow-lg shadow-blue-200 dark:shadow-none">
                         <span>Message @DtBarbod</span>
                     </a>
-                    <div class="mt-10 pt-8 border-t border-gray-100 text-left">
-                        <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Email (Direct)</p>
-                        <p class="text-gray-700">ibarbodalhuie@gmail.com</p>
+                    <div class="mt-10 pt-8 border-t border-gray-100 dark:border-gray-800 text-left">
+                        <p class="text-xs text-gray-400 dark:text-gray-500 uppercase font-bold tracking-widest">Email (Direct)</p>
+                        <p class="text-gray-700 dark:text-gray-300">ibarbodalhuie@gmail.com</p>
                     </div>
                 </div>
             </div>
@@ -380,11 +413,30 @@
 
     </main>
 
-    <footer class="py-12 text-center text-gray-400 border-t border-gray-100">
+    <footer class="py-12 text-center text-gray-400 dark:text-gray-600 border-t border-gray-100 dark:border-gray-800">
         <p>&copy; 2024 English with Barbod.</p>
     </footer>
 
     <script>
+        // --- THEME LOGIC ---
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const icon = isDark ? 'fa-sun' : 'fa-moon';
+            document.getElementById('theme-icon').className = `fas ${icon} ${isDark ? 'text-yellow-400' : ''}`;
+            document.getElementById('theme-icon-mobile').className = `fas ${icon} ${isDark ? 'text-yellow-400' : ''}`;
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateThemeIcons();
+        }
+
         // --- STUDENT PORTAL LOGIC ---
         const SECRET_CODE = "Zxc123987";
         
@@ -414,13 +466,13 @@
             
             studentPractices.forEach(practice => {
                 const card = document.createElement('div');
-                card.className = "bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition flex justify-between items-center";
+                card.className = "bg-white dark:bg-darkCard p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition flex justify-between items-center";
                 card.innerHTML = `
                     <div>
-                        <h4 class="font-bold text-gray-800">${practice.name}</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-100">${practice.name}</h4>
                         <p class="text-xs text-gray-400 uppercase font-semibold">${practice.file}</p>
                     </div>
-                    <a href="${practice.file}" target="_blank" class="bg-blue-50 text-blue-600 p-3 rounded-full hover:bg-blue-600 hover:text-white transition">
+                    <a href="${practice.file}" target="_blank" class="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-3 rounded-full hover:bg-blue-600 hover:text-white transition">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 `;
@@ -450,8 +502,10 @@
             document.querySelectorAll('.nav-link').forEach(link => {
                 if (link.getAttribute('data-page') === pageId) {
                     link.classList.add('text-blue-600');
+                    link.classList.add('dark:text-blue-400');
                 } else {
                     link.classList.remove('text-blue-600');
+                    link.classList.remove('dark:text-blue-400');
                 }
             });
 
@@ -478,6 +532,8 @@
 
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
+            updateThemeIcons();
+            
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('portal-lock').classList.add('hidden');
                 document.getElementById('portal-content').classList.remove('hidden');
@@ -487,7 +543,6 @@
             mobileBtn.addEventListener('click', openMobileMenu);
             closeBtn.addEventListener('click', closeMobileMenu);
             
-            // Allow clicking on links inside mobile menu to close it
             document.querySelectorAll('.mobile-link').forEach(link => {
                 link.addEventListener('click', closeMobileMenu);
             });
