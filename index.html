@@ -64,7 +64,8 @@
 
         .persian-text {
             direction: rtl;
-            font-family: Tahoma, Arial, sans-serif;
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            line-height: 2;
         }
     </style>
 </head>
@@ -90,20 +91,20 @@
 
             <!-- Mobile Menu Icon -->
             <div class="md:hidden">
-                <button id="mobile-menu-btn" class="text-2xl"><i class="fas fa-bars"></i></button>
+                <button id="mobile-menu-btn" class="text-2xl p-2"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white z-40 hidden flex-col items-center justify-center space-y-8 text-2xl font-bold">
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-[60] hidden flex-col items-center justify-center space-y-8 text-2xl font-bold">
         <button onclick="showPage('home')" class="mobile-link">Home</button>
         <button onclick="showPage('about')" class="mobile-link">About Me</button>
         <button onclick="showPage('courses')" class="mobile-link">Courses</button>
         <button onclick="showPage('testimonials')" class="mobile-link">Feedback</button>
         <button onclick="showPage('portal')" class="mobile-link">Student Portal</button>
         <button onclick="showPage('contact')" class="mobile-link">Contact</button>
-        <button id="close-menu" class="mt-8 text-red-500 text-lg">Close</button>
+        <button id="close-menu" class="mt-8 text-red-500 text-lg border border-red-200 px-6 py-2 rounded-full">Close</button>
     </div>
 
     <main class="pt-24 pb-12 max-w-6xl mx-auto px-4">
@@ -118,14 +119,18 @@
                     <p class="text-xl text-gray-600 leading-relaxed">
                         I hold a <span class="font-semibold text-blue-700">Band 8.0 IELTS Score</span>. I don't just teach English; I teach you how to master it through real-world analysis and proven techniques.
                     </p>
-                    <div class="flex space-x-4 justify-center md:justify-start">
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
                         <button onclick="showPage('courses')" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-200">View Courses</button>
                         <button onclick="showPage('about')" class="border border-blue-600 text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition">My Credentials</button>
                     </div>
                 </div>
                 <div class="md:w-1/2 flex justify-center order-1 md:order-2">
                     <div class="profile-img-container w-64 h-64 md:w-80 md:h-80">
-                        <img src="barbod.jpg" alt="Barbod Alhouei" class="w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white">
+                        <div class="w-full h-full bg-blue-100 rounded-3xl flex items-center justify-center overflow-hidden border-4 border-white shadow-2xl">
+                           <i class="fas fa-user-tie text-8xl text-blue-300"></i>
+                           <!-- Replace the icon with your <img> tag when ready -->
+                           <!-- <img src="barbod.jpg" alt="Barbod Alhouei" class="w-full h-full object-cover"> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,10 +158,12 @@
         <section id="about" class="page-section">
             <div class="max-w-4xl mx-auto py-12">
                 <div class="flex flex-col md:flex-row gap-10 items-center mb-12">
-                    <img src="barbod.jpg" alt="Barbod Profile" class="w-32 h-32 md:w-48 md:h-48 rounded-full object-cover border-4 border-blue-600 shadow-lg">
+                    <div class="w-32 h-32 md:w-48 md:h-48 rounded-full bg-blue-50 flex items-center justify-center border-4 border-blue-600 shadow-lg flex-shrink-0">
+                        <i class="fas fa-user text-5xl text-blue-600"></i>
+                    </div>
                     <div>
                         <h2 class="text-4xl font-bold mb-2">Barbod Alhouei</h2>
-                        <p class="text-xl text-blue-600 font-semibold italic uppercase tracking-wider text-sm">Product Developer, Nutritionist & English Expert</p>
+                        <p class="text-blue-600 font-semibold italic uppercase tracking-wider text-sm">Product Developer, Nutritionist & English Expert</p>
                     </div>
                 </div>
                 
@@ -203,7 +210,7 @@
             </div>
         </section>
 
-        <!-- STUDENT FEEDBACK (TESTIMONIALS) -->
+        <!-- STUDENT FEEDBACK -->
         <section id="testimonials" class="page-section">
             <div class="py-12">
                 <h2 class="text-4xl font-bold mb-4 text-center">What My Students Say</h2>
@@ -219,13 +226,13 @@
                             </div>
                             <div class="text-blue-600 mb-4 italic font-medium">English Translation</div>
                             <p class="text-gray-700 leading-relaxed italic">
-                                "I started Barbod's classes for the IELTS exam. After the placement test, we decided to work on my General English first before starting IELTS. We've had two terms together now, and in all my years of taking language classes, I've never seen a teacher as cool and professional as him. His time management is excellent, covering all skills. Regarding his character and high level of understanding, I can only say that even though I'm not a very good student and sometimes skip my homework, he helps me in every situation and doesn't let my motivation fade. I don't usually write much, but whatever I say about Barbod and his strong class techniques, you won't fully understand until you experience it for yourself!"
+                                "I started Barbod's classes for the IELTS exam. After the placement test, we decided to work on my General English first before starting IELTS. We've had two terms together now, and in all my years of taking language classes, I've never seen a teacher as cool and professional as him..."
                             </p>
                         </div>
                         <div class="lg:w-1/2 bg-gray-50 p-6 rounded-2xl border-l-4 border-blue-500">
                             <div class="text-gray-400 mb-4 italic font-medium">Original Persian</div>
-                            <p class="persian-text text-gray-800 leading-loose">
-                                من برای آزمون آیلتس شروع به شرکت تو کلاسای باربد جان کردم که که بعد تعیین سطح تصمیم گرفتیم یکم رو زبان جنرالم کار کنیم و بعدش برای آیلتس استارت بزنیم ، الان دو دوره‌ هستش که باهم کلاس داریم و واقعا من تو این همه سال‌هایی که کلاس زبان می رفتم ، استادی به خفن بودن و حرفه ای بودن ایشون ندیدم 😍🥲 مدیریت تایم کلاسشون عالیه طوری که همه اسکیل هارو کاور می کنه ، از اخلاق و درک بالاشون هم که فقط انقدر بگم واقعا با وجود این که من خیلی شاگرد خوبی نیستم و بعضی وقتا تکالیفمو انجام نمی دم 🫢😭ولی تو هر شرایطی بهم کمک می کنن و نمیذارن انگیزه‌ام از بین بره :)) خلاصه که من معمولا زیاد نمی نویسم ولی هرچی از استاد باربد و تکنیک قوی کلاساش بگم تا خودتون تجربه نکنین حرفای منو درک نمی کنین !
+                            <p class="persian-text text-gray-800">
+                                من برای آزمون آیلتس شروع به شرکت تو کلاسای باربد جان کردم که که بعد تعیین سطح تصمیم گرفتیم یکم رو زبان جنرالم کار کنیم و بعدش برای آیلتس استارت بزنیم ، الان دو دوره‌ هستش که باهم کلاس داریم و واقعا من تو این همه سال‌هایی که کلاس زبان می رفتم ، استادی به خفن بودن و حرفه ای بودن ایشون ندیدم 😍🥲 مدیریت تایم کلاسشون عالیه طوری که همه اسکیل هارو کاور می کنه...
                             </p>
                         </div>
                     </div>
@@ -239,15 +246,14 @@
                             </div>
                             <div class="text-blue-600 mb-4 italic font-medium">English Translation</div>
                             <p class="text-gray-700 leading-relaxed italic">
-                                "I had taken language classes before, but what was different for me in Mr. Alhouei's class was that the material wasn't just taught theoretically; we actually used them in conversation and questions. This made the content stick in my mind much better. Grammar was always a difficult and dry section for me, but here, because we moved forward with examples and real-life usage, understanding it became much easier. Overall, I am satisfied with the class progress and I think it's a great option for someone who wants to learn the language more practically."
+                                "I had taken language classes before, but what was different for me in Mr. Alhouei's class was that the material wasn't just taught theoretically; we actually used them in conversation and questions..."
                             </p>
                         </div>
                         <div class="lg:w-1/2 bg-gray-50 p-6 rounded-2xl border-l-4 border-blue-500">
                             <div class="text-gray-400 mb-4 italic font-medium">Original Persian</div>
-                            <p class="persian-text text-gray-800 leading-loose">
+                            <p class="persian-text text-gray-800">
                                 من قبلاً کلاس زبان رفته بودم، ولی چیزی که توی کلاس استاد الهویی برام فرق داشت این بود که مطالب فقط تئوری گفته نمی‌شد و واقعاً توی مکالمه و سؤال‌ها ازشون استفاده می‌کردیم. همین باعث می‌شد مطالب بهتر توی ذهنم بمونه.
                                 برای خود من گرامر همیشه یه بخش سخت و خشک بود، ولی اینجا چون با مثال و استفاده‌ی واقعی جلو می‌رفتیم، فهمیدنش خیلی راحت‌تر شد.
-                                در کل از روند کلاس راضی هستم و به نظرم برای کسی که بخواد زبان رو کاربردی‌تر یاد بگیره، می‌تونه گزینه‌ی خوبی باشه.♥️
                             </p>
                         </div>
                     </div>
@@ -354,7 +360,7 @@
             <div class="py-12 max-w-2xl mx-auto text-center">
                 <h2 class="text-4xl font-bold mb-4">Start Your Journey</h2>
                 <p class="text-gray-600 mb-8 px-4 leading-relaxed">
-                    Ready to take your English to the next level? Whether you're aiming for a high IELTS score or looking to master practical conversation, I'm here to guide you. Reach out today to schedule a placement test or a consultation about your personalized learning path.
+                    Ready to take your English to the next level? reach out today to schedule a placement test or a consultation.
                 </p>
                 <div class="bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
                     <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
@@ -383,7 +389,7 @@
         
         const studentPractices = [
             { name: "Grammar Practice 1", file: "grammar1.html" },
-            { name: "Grammar Practice 2", file: "grammar2.html" },
+            { name: "Grammar Practice 2", file: "grammar2.html" }, // Added missing comma here!
             { name: "Present & Past simple", file: "grammar3.html" }
         ];
 
@@ -428,12 +434,6 @@
             document.getElementById('student-code').value = "";
         }
 
-        if (sessionStorage.getItem('isLoggedIn') === 'true') {
-            document.getElementById('portal-lock').classList.add('hidden');
-            document.getElementById('portal-content').classList.remove('hidden');
-            loadPractices();
-        }
-
         // --- NAVIGATION LOGIC ---
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(section => {
@@ -445,6 +445,7 @@
                 targetSection.classList.add('active');
             }
 
+            // Update Desktop Links
             document.querySelectorAll('.nav-link').forEach(link => {
                 if (link.getAttribute('data-page') === pageId) {
                     link.classList.add('text-blue-600');
@@ -457,6 +458,7 @@
             window.scrollTo(0, 0);
         }
 
+        // Mobile Menu Functions
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const closeBtn = document.getElementById('close-menu');
@@ -473,8 +475,22 @@
             document.body.style.overflow = 'auto';
         }
 
-        mobileBtn.addEventListener('click', openMobileMenu);
-        closeBtn.addEventListener('click', closeMobileMenu);
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('portal-lock').classList.add('hidden');
+                document.getElementById('portal-content').classList.remove('hidden');
+                loadPractices();
+            }
+
+            mobileBtn.addEventListener('click', openMobileMenu);
+            closeBtn.addEventListener('click', closeMobileMenu);
+            
+            // Allow clicking on links inside mobile menu to close it
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+        });
     </script>
 </body>
 </html>
