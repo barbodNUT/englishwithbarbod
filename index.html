@@ -93,6 +93,11 @@
             font-family: 'Tahoma', 'Arial', sans-serif;
             line-height: 2;
         }
+
+        .category-tab.active {
+            background-color: #2563eb;
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100">
@@ -114,7 +119,6 @@
                 <button onclick="showPage('portal')" class="hover:text-blue-600 transition nav-link" data-page="portal">Student Portal</button>
                 <button onclick="showPage('contact')" class="hover:text-blue-600 transition nav-link" data-page="contact">Contact</button>
                 
-                <!-- Dark Mode Toggle -->
                 <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition" title="Toggle Theme">
                     <i id="theme-icon" class="fas fa-moon dark:text-yellow-400"></i>
                 </button>
@@ -297,7 +301,7 @@
 
         <!-- STUDENT PORTAL -->
         <section id="portal" class="page-section">
-            <div class="max-w-3xl mx-auto py-12">
+            <div class="max-w-4xl mx-auto py-12">
                 <div id="portal-lock" class="bg-white dark:bg-darkCard p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 text-center">
                     <div class="w-16 h-16 bg-gray-100 dark:bg-darkBg text-gray-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
                         <i class="fas fa-lock"></i>
@@ -312,13 +316,23 @@
                 </div>
 
                 <div id="portal-content" class="hidden space-y-8">
-                    <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-3xl font-bold dark:text-white">Practice Materials</h2>
-                        <button onclick="logoutPortal()" class="text-gray-400 hover:text-red-500 text-sm flex items-center transition">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h2 class="text-3xl font-bold dark:text-white">Practice Materials</h2>
+                            <p class="text-gray-500 text-sm">Organized by category</p>
+                        </div>
+                        <button onclick="logoutPortal()" class="text-gray-400 hover:text-red-500 text-sm flex items-center transition w-fit">
                             <i class="fas fa-sign-out-alt mr-2"></i> Lock Portal
                         </button>
                     </div>
-                    <div id="practice-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Category Tabs -->
+                    <div id="portal-tabs" class="flex flex-wrap gap-2 mb-8 border-b dark:border-gray-800 pb-4">
+                        <!-- Tabs generated dynamically -->
+                    </div>
+
+                    <!-- Practice Grid -->
+                    <div id="practice-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Dynamic content loaded here -->
                     </div>
                 </div>
@@ -437,14 +451,24 @@
             updateThemeIcons();
         }
 
-        // --- STUDENT PORTAL LOGIC ---
+        // --- STUDENT PORTAL CATEGORIZED LOGIC ---
         const SECRET_CODE = "Zxc123987";
+        let currentCategory = 'Grammar';
         
-        const studentPractices = [
-            { name: "Grammar Practice 1", file: "grammar1.html" },
-            { name: "Grammar Practice 2", file: "grammar2.html" },
-            { name: "Present & Past simple", file: "grammar3.html" }
-        ];
+        // --- ADD YOUR FILES HERE ---
+        const portalData = {
+            'Grammar': [
+                { name: "Grammar Practice 1", file: "grammar1.html" },
+                { name: "Grammar Practice 2", file: "grammar2.html" },
+                { name: "Present & Past simple", file: "grammar3.html" }
+            ],
+            'Collocation': [
+                { name: "Collocation Practice 1", file: "collocation1.html" }
+            ],
+            'Vocabulary': [
+                // Future use
+            ]
+        };
 
         function verifyCode() {
             const input = document.getElementById('student-code').value;
@@ -453,27 +477,55 @@
             if (input === SECRET_CODE) {
                 document.getElementById('portal-lock').classList.add('hidden');
                 document.getElementById('portal-content').classList.remove('hidden');
-                loadPractices();
+                renderPortal();
                 sessionStorage.setItem('isLoggedIn', 'true');
             } else {
                 error.classList.remove('hidden');
             }
         }
 
-        function loadPractices() {
+        function renderPortal() {
+            renderTabs();
+            renderPractices();
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('portal-tabs');
+            tabsContainer.innerHTML = "";
+            
+            Object.keys(portalData).forEach(cat => {
+                const btn = document.createElement('button');
+                btn.innerText = cat;
+                btn.className = `category-tab px-6 py-2 rounded-full font-bold transition text-sm ${currentCategory === cat ? 'active bg-blue-600 text-white' : 'bg-gray-100 dark:bg-darkCard text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800'}`;
+                btn.onclick = () => {
+                    currentCategory = cat;
+                    renderPortal();
+                };
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function renderPractices() {
             const list = document.getElementById('practice-list');
             list.innerHTML = "";
             
-            studentPractices.forEach(practice => {
+            const practices = portalData[currentCategory];
+
+            if (!practices || practices.length === 0) {
+                list.innerHTML = `<div class="col-span-full py-20 text-center text-gray-400 italic">No practices available in this category yet.</div>`;
+                return;
+            }
+            
+            practices.forEach(practice => {
                 const card = document.createElement('div');
-                card.className = "bg-white dark:bg-darkCard p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition flex justify-between items-center";
+                card.className = "bg-white dark:bg-darkCard p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition flex justify-between items-center group";
                 card.innerHTML = `
                     <div>
-                        <h4 class="font-bold text-gray-800 dark:text-gray-100">${practice.name}</h4>
-                        <p class="text-xs text-gray-400 uppercase font-semibold">${practice.file}</p>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">${practice.name}</h4>
+                        <p class="text-xs text-gray-400 uppercase font-semibold mt-1">${practice.file}</p>
                     </div>
                     <a href="${practice.file}" target="_blank" class="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-3 rounded-full hover:bg-blue-600 hover:text-white transition">
-                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-external-link-alt text-sm"></i>
                     </a>
                 `;
                 list.appendChild(card);
@@ -498,7 +550,6 @@
                 targetSection.classList.add('active');
             }
 
-            // Update Desktop Links
             document.querySelectorAll('.nav-link').forEach(link => {
                 if (link.getAttribute('data-page') === pageId) {
                     link.classList.add('text-blue-600');
@@ -513,7 +564,6 @@
             window.scrollTo(0, 0);
         }
 
-        // Mobile Menu Functions
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const closeBtn = document.getElementById('close-menu');
@@ -530,14 +580,13 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             updateThemeIcons();
             
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('portal-lock').classList.add('hidden');
                 document.getElementById('portal-content').classList.remove('hidden');
-                loadPractices();
+                renderPortal();
             }
 
             mobileBtn.addEventListener('click', openMobileMenu);
