@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everyday Verbs - Student Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .collocation-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .collocation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .example-text {
+            border-left: 3px solid #3b82f6;
+            background-color: #eff6ff;
+            display: none;
+        }
+
+        .show-example .example-text {
+            display: block;
+        }
+
+        .highlight {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .tab-active {
+            border-bottom: 2px solid #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="mb-10 text-center">
+            <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Vocabulary Building</span>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Collocations with Everyday Verbs</h1>
+            <p class="text-gray-600 mt-3 max-w-2xl mx-auto">
+                Study how to use "Go", "Turn", "Become", "Fall", and "Grow" for changes instead of overusing "Get". 
+            </p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="flex space-x-8 border-b border-gray-200 mb-8 justify-center">
+            <button id="tab-study" onclick="switchTab('study')" class="pb-4 px-2 tab-active transition-all">Study Mode</button>
+            <button id="tab-quiz" onclick="switchTab('quiz')" class="pb-4 px-2 text-gray-500 hover:text-blue-600 transition-all">Quiz Mode</button>
+        </div>
+
+        <!-- Study View -->
+        <div id="view-study">
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-700">Essential Collocations for Changes</h2>
+                <button onclick="toggleAllExamples()" class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                    Toggle All Examples
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="collocations-grid">
+                <!-- Data injected here -->
+            </div>
+        </div>
+
+        <!-- Quiz View -->
+        <div id="view-quiz" class="hidden">
+            <div id="quiz-container" class="space-y-6">
+                <!-- Quiz questions injected here -->
+            </div>
+            <div class="mt-10 text-center">
+                <button id="submit-quiz" onclick="checkQuiz()" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg">
+                    Submit and Review Answers
+                </button>
+                <button id="reset-quiz" onclick="startQuiz()" class="hidden bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold hover:bg-gray-300 transition ml-4">
+                    Retake Quiz
+                </button>
+            </div>
+            <div id="quiz-result" class="hidden mt-8 p-6 rounded-xl text-center">
+                <!-- Result message -->
+            </div>
+        </div>
+
+        <footer class="mt-12 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+            © 2024 English with Barbod | Master Your IELTS Potential
+        </footer>
+    </div>
+
+    <script>
+        const data = [
+            { phrase: "go mad/bald/blind/deaf", answer: "go", example: "Some people [___] grey at a very young age." },
+            { phrase: "go red (embarrassment)", answer: "went", example: "He was very embarrassed and his face [___] red." },
+            { phrase: "go dark (sudden change)", answer: "went", example: "Suddenly the sky [___] very dark and it started to rain." },
+            { phrase: "turn gold/red (colours)", answer: "turned", example: "The sky [___] gold as the sun set." },
+            { phrase: "turn white (shock)", answer: "turned", example: "The news gave his mother such a shock that her hair [___] white overnight." },
+            { phrase: "become pregnant", answer: "became", example: "She gave up smoking when she [___] pregnant." },
+            { phrase: "become involved in", answer: "become", example: "I would like to [___] involved in raising money for charity." },
+            { phrase: "become extinct/famous", answer: "become", example: "Our local baker's has [___] famous for its apple tarts." },
+            { phrase: "become depressed/angry", answer: "became", example: "He [___] depressed after his wife's death." },
+            { phrase: "fall ill", answer: "fell", example: "She [___] ill and was taken to hospital." },
+            { phrase: "fall silent", answer: "fell", example: "Everyone [___] silent when they heard the shocking news." },
+            { phrase: "grow older", answer: "grew", example: "As my father [___] older, he spent less time working." },
+            { phrase: "grow louder", answer: "grew", example: "The noise [___] louder and soon we realised it was a plane." }
+        ];
+
+        const grid = document.getElementById('collocations-grid');
+        const quizContainer = document.getElementById('quiz-container');
+
+        // Render Study Mode
+        function renderStudyCards() {
+            grid.innerHTML = data.map(item => `
+                <div class="collocation-card bg-white border border-gray-200 rounded-xl p-5 cursor-pointer select-none" 
+                     onclick="this.classList.toggle('show-example')">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-lg font-bold text-blue-900">${item.phrase}</h3>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="example-text mt-4 p-3 rounded-md italic text-gray-700 text-sm">
+                        "${item.example.replace('[___]', `<span class='highlight'>${item.answer}</span>`)}"
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            if (tab === 'study') {
+                document.getElementById('view-study').classList.remove('hidden');
+                document.getElementById('view-quiz').classList.add('hidden');
+                document.getElementById('tab-study').classList.add('tab-active');
+                document.getElementById('tab-quiz').classList.remove('tab-active');
+            } else {
+                document.getElementById('view-study').classList.add('hidden');
+                document.getElementById('view-quiz').classList.remove('hidden');
+                document.getElementById('tab-study').classList.remove('tab-active');
+                document.getElementById('tab-quiz').classList.add('tab-active');
+                startQuiz();
+            }
+        }
+
+        // Quiz Logic
+        function startQuiz() {
+            quizContainer.innerHTML = data.map((item, index) => {
+                const parts = item.example.split('[___]');
+                return `
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm" id="q-block-${index}">
+                        <p class="text-gray-800 text-lg mb-4">
+                            ${parts[0]} <input type="text" id="q-${index}" 
+                            class="border-b-2 border-blue-300 focus:border-blue-600 outline-none px-2 py-1 w-40 text-blue-700 font-semibold text-center bg-transparent"
+                            placeholder="..."> ${parts[1]}
+                        </p>
+                        <div id="feedback-${index}" class="hidden text-sm font-medium mt-2"></div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('submit-quiz').classList.remove('hidden');
+            document.getElementById('reset-quiz').classList.add('hidden');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            data.forEach((item, index) => {
+                const input = document.getElementById(`q-${index}`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = item.answer.toLowerCase();
+
+                feedback.classList.remove('hidden');
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    feedback.innerHTML = `<span class="text-green-600">✓ Correct!</span>`;
+                    input.className = input.className.replace('border-blue-300', 'border-green-500');
+                } else {
+                    feedback.innerHTML = `<span class="text-red-500">✗ Incorrect.</span> The correct word is <span class="text-blue-600 font-bold">"${item.answer}"</span>`;
+                    input.className = input.className.replace('border-blue-300', 'border-red-400');
+                }
+                input.disabled = true;
+            });
+
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden');
+            resultDiv.className = `mt-8 p-6 rounded-xl text-center ${score === data.length ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`;
+            resultDiv.innerHTML = `
+                <h3 class="text-2xl font-bold">Your Score: ${score} / ${data.length}</h3>
+                <p class="mt-2">${score === data.length ? "Perfect! You've mastered these collocations." : "Review the incorrect answers above to improve your score."}</p>
+            `;
+
+            document.getElementById('submit-quiz').classList.add('hidden');
+            document.getElementById('reset-quiz').classList.remove('hidden');
+            
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        let allOpen = false;
+        function toggleAllExamples() {
+            const cards = document.querySelectorAll('.collocation-card');
+            allOpen = !allOpen;
+            cards.forEach(card => {
+                if (allOpen) card.classList.add('show-example');
+                else card.classList.remove('show-example');
+            });
+        }
+
+        renderStudyCards();
+    </script>
+</body>
+</html>
